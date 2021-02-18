@@ -7,6 +7,10 @@
 
 ----------
 
+### [requirements]
+	tensorflow==1.14 (tested)
+	python==2.7
+
 
 ### [download dataset]
 
