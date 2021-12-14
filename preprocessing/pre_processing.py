@@ -7,7 +7,7 @@ what:   generate dictionary from corpus
 '''
 from __future__ import division
 
-from nltk.tokenize import word_tokenize
+#from nltk.tokenize import word_tokenize
 import io
 import pickle
 import csv
@@ -16,11 +16,12 @@ from collections import defaultdict
 import argparse
 
 import os
-from nltk.tag import StanfordNERTagger
+#from nltk.tag import StanfordNERTagger
 
 STANFORDTOOLS_DIR = '../stanford-ner-2016-10-31'
 NER_PROCESSED = '_ner'
-DATA_DIR = '../data/UbuntuDialogs_data/'
+#DATA_DIR = '../data/UbuntuDialogs_data/'
+DATA_DIR = '../data/corona/'
     
 
 class PRE_PROCESSING:

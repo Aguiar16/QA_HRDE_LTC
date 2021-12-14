@@ -78,6 +78,7 @@ class ProcessData:
             
             source_ids = self.train_data['c'][index]
             target_ids = self.train_data['r'][index]
+            print(self.train_data['y'][index])
             label = float(self.train_data['y'][index])
             
             self.train_set.append( [source_ids, target_ids, label] )
