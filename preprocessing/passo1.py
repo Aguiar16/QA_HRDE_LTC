@@ -58,18 +58,18 @@ def read_test(dic, file_name):
 
 dic_ori = defaultdict(int)
 
-dic_ori = read_train(dic_ori, '../data/ubuntu_v2/train.csv')
+dic_ori = read_train(dic_ori, '../data/corona/train.csv')
 
-dic_ori = read_test(dic_ori, '../data/ubuntu_v2/valid.csv')
+dic_ori = read_test(dic_ori, '../data/corona/valid.csv')
 
-pickle.dump( dic_ori, open('../data/ubuntu_v2/dic_ori.pkl', 'w')  )
+pickle.dump( dic_ori, open('../data/corona/dic_ori.pkl', 'w')  )
 
 
 # ## reducing dictionary
 
 pp = PRE_PROCESSING()
 
-dic_ori = pickle.load( open('../data/ubuntu_v2/dic_ori.pkl', 'r') )
+dic_ori = pickle.load( open('../data/corona/dic_ori.pkl', 'r') )
 pp.frequency_ori = dic_ori
 dic = pp._apply_mincut(3)
 
@@ -81,18 +81,18 @@ for word in dic.keys():
     voca[word] = len(voca)    
     
 
-pickle.dump( voca, open('../data/ubuntu_v2/v2_dic.pkl', 'w')  )
+pickle.dump( voca, open('../data/corona/corona_dic.pkl', 'w')  )
 
 # ### convert data to index format
 
-dic = pickle.load(open('../data/ubuntu_v2/v2_dic.pkl', 'r') )
+dic = pickle.load(open('../data/corona/corona_dic.pkl', 'r') )
 
 v = Vocab(dic)
 
 
 train_data = []
 
-f = open('../data/ubuntu_v2/train.csv', 'r')
+f = open('../data/corona/train.csv', 'r')
 # f = open('../data/samsungQA/train.csv', 'r')
 csvReader = csv.reader(f)
 for row in csvReader:
@@ -101,7 +101,7 @@ f.close()
 
 val_data = []
 
-f = open('../data/ubuntu_v2/valid.csv', 'r')
+f = open('../data/corona/valid.csv', 'r')
 # f = open('../data/samsungQA/valid.csv', 'r')
 csvReader = csv.reader(f)
 for row in csvReader:
@@ -110,7 +110,7 @@ f.close()
 
 test_data = []
 
-f = open('../data/ubuntu_v2/test.csv', 'r')
+f = open('../data/corona/test.csv', 'r')
 # f = open('../data/samsungQA/test.csv', 'r')
 csvReader = csv.reader(f)
 for row in csvReader:
@@ -154,7 +154,7 @@ valid_set = create_data_index(val_data)
 
 test_set = create_data_index(test_data)
 
-pickle.dump( [train_set, valid_set, test_set], open('../data/ubuntu_v2/v2_data.pkl', 'w') )
+pickle.dump( [train_set, valid_set, test_set], open('../data/corona/corona_data.pkl', 'w') )
 
 
 train_set_test = {}
@@ -173,7 +173,7 @@ test_set_test['c'] = test_set['c'][:5000]
 test_set_test['r'] = test_set['r'][:5000]
 test_set_test['y'] = test_set['y'][:5000]
 
-pickle.dump( [train_set_test, valid_set_test, test_set_test], open('../data/ubuntu_v2/v2_data_test.pkl', 'w') )
+pickle.dump( [train_set_test, valid_set_test, test_set_test], open('../data/corona/corona_data_test.pkl', 'w') )
 # pickle.dump( [train_set_test, valid_set_test, test_set_test], open('../data/samsungQA/SA_data_test.pkl', 'w') )
 
 

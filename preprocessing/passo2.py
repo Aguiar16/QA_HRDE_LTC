@@ -73,17 +73,17 @@ def create_glove_embedding(voca):
     print 'coverage : ' + str( 1 - ( cnt/ float(len(voca)) ) )
     return list_glove_voca
 
-glove = loadGloveModel('../data/embedding/glove.840B.300d.txt')
+glove = loadGloveModel('../data/embedding/glove_s300.txt')
 
 # ### ubuntu-v2 case
 
-voca = pickle.load( open('../data/ubuntu_v2/v2_dic.pkl', 'r') )
+voca = pickle.load( open('../data/corona/corona_dic.pkl', 'r') )
 
 cal_coverage(voca)
 cal_coverage_num(voca)
 list_glove_voca = create_glove_embedding(voca)
 
-pickle.dump( np.asarray(list_glove_voca), open('../data/ubuntu_v2/v2_glove.pkl', 'w'))
+pickle.dump( np.asarray(list_glove_voca), open('../data/corona/corona_glove.pkl', 'w'))
 
 
 
