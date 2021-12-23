@@ -4,6 +4,7 @@ from tensorflow.core.framework import summary_pb2
 from random import shuffle
 import numpy as np
 from scipy.stats import rankdata
+import sys
 
 """
     desc  : True case : 2nd item always
@@ -30,6 +31,8 @@ def run_test_r_order(sess, model, batch_gen, data, N):
     test_index = 0
     
     itr_loop = len(data) / model.batch_size
+    
+
     
     for test_itr in xrange( itr_loop ):
         
@@ -103,7 +106,12 @@ def run_test_r_order(sess, model, batch_gen, data, N):
     avg_accr = 0
     avg_accr_R2 = 0
     avg_accr_R5 = 0
-    
+
+    # print "data len :" + str(len(data))
+    # print "model batchsize :" + str(model.batch_size)
+    # print "itr loop :" + str(itr_loop)
+    # sys.exit()
+
     avg_accr = sum(batch_correct) / float( itr_loop * model.batch_size )    
     if N == 10:
         avg_accr_R2 = sum(batch_correct_R2) / float( itr_loop * model.batch_size ) 

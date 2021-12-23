@@ -107,7 +107,7 @@ voca_size = len(batch_gen.voca)
 source_vocab_size = voca_size
 target_vocab_size = voca_size
 
-batch_size = 1024
+batch_size = 256
 encoder_size, encoderR_size = 160, 160
 
 num_layer = 1

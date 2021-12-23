@@ -105,7 +105,7 @@ batch_gen = ProcessData(is_test=False)
 
 voca_size = len(batch_gen.voca)
 
-batch_size = 1024
+batch_size = 256
 encoder_size, context_size, encoderR_size = 80, 15, 160
 
 num_layer = 1
