@@ -11,4 +11,5 @@ python DE_Model_v2.py \
     --is_save 1 \
     --graph_prefix 'RDE_ubuntu_v2_' \
     --use_glove 1 \
-    --dr 0.2
+    --dr 0.2 \
+    --fine_tunning
