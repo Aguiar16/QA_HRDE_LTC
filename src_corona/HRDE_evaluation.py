@@ -96,10 +96,18 @@ def run_test_r_order(sess, model, batch_gen, data, N):
         rank = [ N - rankdata(x, method='max') for x in prob_reshape]
         
         batch_correct.append( sum([1 for x in rank if x[-1] < 1 ]) )
+        # raw precision for new accuracy test
+        raw_precision = []
+        raw_precision_R2 = []
+        raw_precision_R5 = []
+        raw_precision.append([1 if x[-1] < 1 else 0 for x in rank ])
         
         if N == 10:
             batch_correct_R2.append( sum([1 for x in rank if x[-1] < 2]) )
             batch_correct_R5.append( sum([1 for x in rank if x[-1] < 5]) )
+            # raw precision for new accuracy test
+            raw_precision_R2.append([1 if x[-1] < 2 else 0 for x in rank ])
+            raw_precision_R5.append([1 if x[-1] < 5 else 0 for x in rank ])
         
 
     avg_ce = sum(batch_ce) / ( len(data)/float(model.batch_size) ) / N
@@ -121,4 +129,4 @@ def run_test_r_order(sess, model, batch_gen, data, N):
     value2 = summary_pb2.Summary.Value(tag="valid_accuracy_"+str(N), simple_value=avg_accr)
     summary = summary_pb2.Summary(value=[value1, value2])
     
-    return avg_ce, avg_accr, summary, avg_accr_R2, avg_accr_R5
+    return avg_ce, avg_accr, summary, avg_accr_R2, avg_accr_R5,raw_precision,raw_precision_R2,raw_precision_R5

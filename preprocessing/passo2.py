@@ -3,6 +3,8 @@ import pickle
 import numpy as np
 import operator
 
+# esse arquivo gera o modelo_glove.pkl utilizando o arquivo glove e o modelo_dic.pkl
+
 def loadGloveModel(gloveFile):
     print "Loading Glove Model"
     f = open(gloveFile,'r')

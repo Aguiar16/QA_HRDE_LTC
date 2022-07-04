@@ -43,10 +43,10 @@ def run_single_eval(model, batch_gen, target_dir, N):
             print ('from check point!!!')
             saver.restore(sess, ckpt.model_checkpoint_path)
 
-        ce, accr, summary, r2, r5 = run_test_r_order(sess=sess, model=model, batch_gen=batch_gen,
+        ce, accr, summary, r2, r5, raw_precision,raw_precision_R2,raw_precision_R5 = run_test_r_order(sess=sess, model=model, batch_gen=batch_gen,
                                                  data=batch_gen.test_set, N=N)
 
-    return accr, r2, r5
+    return accr, r2, r5, raw_precision,raw_precision_R2,raw_precision_R5
 
 
 
@@ -63,27 +63,26 @@ def evals(result_file_name, path, list_save, model, batch_gen):
         n2_r1 = []
 
         for save_name in list_save:
+            for i in range(1):
+                f.write(save_name + '\n')
 
-            f.write(save_name + '\n')
+                accr, r2, r5, raw_precision,_,_ = run_single_eval(model, batch_gen, path + save_name, 2)
+                print accr, r2, r5
+                n2_r1.append(accr)
+                f.write( str(accr) + '\t')
 
-            accr, r2, r5 = run_single_eval(model, batch_gen, path + save_name, 2)
-            print accr, r2, r5
-            n2_r1.append(accr)
-            f.write( str(accr) + '\t')
-
-            
-            accr, r2, r5 = run_single_eval(model, batch_gen, path + save_name, 2)
-            print accr, r2, r5
-            n2_r1.append(accr)
-            f.write( str(accr) + '\t')
-            
-            
-            accr, r2, r5 = run_single_eval(model, batch_gen, path + save_name, 10)
-            print accr, r2, r5
-            n10_r1.append(accr)
-            n10_r2.append(r2)
-            n10_r5.append(r5)
-            f.write( str(accr) + '\t' + str(r2) + '\t' + str(r5) + '\n')
+                accr, r2, r5, raw_precision2,_,_ = run_single_eval(model, batch_gen, path + save_name, 2)
+                print accr, r2, r5
+                n2_r1.append(accr)
+                f.write( str(accr) + '\t')
+                       
+                
+                accr, r2, r5, raw_precision3,raw_precision_R2,raw_precision_R5 = run_single_eval(model, batch_gen, path + save_name, 10)
+                print accr, r2, r5
+                n10_r1.append(accr)
+                n10_r2.append(r2)
+                n10_r5.append(r5)
+                f.write( str(accr) + '\t' + str(r2) + '\t' + str(r5) + '\n')
             
         print "mean-std"
         print str(np.mean(n2_r1)), str(np.mean(n10_r1)), str(np.mean(n10_r2)), str(np.mean(n10_r5))
@@ -91,6 +90,25 @@ def evals(result_file_name, path, list_save, model, batch_gen):
         
         f.write( str(np.mean(n2_r1)) + '\t' + str(np.mean(n10_r1)) + '\t' + str(np.mean(n10_r2)) + '\t' + str(np.mean(n10_r5)) + '\n')
         f.write( str( np.std(n2_r1)) + '\t' + str( np.std(n10_r1)) + '\t' + str( np.std(n10_r2)) + '\t' + str( np.std(n10_r5)) + '\n\n')
+
+    pathRAW='rawsRDE_LTC'
+    if not os.path.isdir(pathRAW):
+        os.mkdir(pathRAW)
+    with open(pathRAW+"/raw_1_in_2x1.txt",'w') as f:
+        for item in raw_precision:
+            f.write('%s\n'%str(item))
+    with open(pathRAW+"/raw_1_in_2x2.txt",'w') as f:
+        for item in raw_precision2:
+            f.write('%s\n'%str(item))
+    with open(pathRAW+"/raw_1_in_10R1.txt",'w') as f:
+        for item in raw_precision3:
+            f.write('%s\n'%str(item))
+    with open(pathRAW+"/raw_1_in_10R2.txt",'w') as f:
+        for item in raw_precision_R2:
+            f.write('%s\n'%str(item))
+    with open(pathRAW+"/raw_1_in_10R5.txt",'w') as f:
+        for item in raw_precision_R5:
+            f.write('%s\n'%str(item))
         
         
 '''

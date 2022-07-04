@@ -1,1 +1,0 @@
-../src_samsungQA/Vocab.py

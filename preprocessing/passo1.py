@@ -62,6 +62,10 @@ dic_ori = read_train(dic_ori, '../data/corona/train.csv')
 
 dic_ori = read_test(dic_ori, '../data/corona/valid.csv')
 
+dic_ori = read_train(dic_ori, '../data/corona/trainUb.csv')
+
+dic_ori = read_test(dic_ori, '../data/corona/validUb.csv')
+
 pickle.dump( dic_ori, open('../data/corona/dic_ori.pkl', 'w')  )
 
 
