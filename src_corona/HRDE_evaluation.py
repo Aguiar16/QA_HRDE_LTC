@@ -80,12 +80,14 @@ def run_test_r_order(sess, model, batch_gen, data, N):
             input_feed[model.dr_memory_prob] = 1.0
 
             try:
-                bprob, b_loss, lo = sess.run([model.batch_prob, model.batch_loss, model.loss], input_feed)
+                bprob, b_loss, lo, scoreY = sess.run([model.batch_prob, model.batch_loss, model.loss,model.scoreY], input_feed)
             except:
                 print "excepetion occurs in valid step : " + str(test_itr)
                 pass
             
-            
+            with open("scoreHRDE.txt",'a') as f:
+                f.write('%s\n' %str(scoreY))
+
             #if loop is (N-1):
             batch_ce.append( lo )
             

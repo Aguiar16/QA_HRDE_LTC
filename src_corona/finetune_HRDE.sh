@@ -17,4 +17,5 @@ python HRDE_Model_v2.py \
     --dr 0.3 \
     --dr_con 1.0 \
     --memory_dim 1 \
-    --topic_size 1
+    --topic_size 1 \
+    --fine_tunning

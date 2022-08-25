@@ -55,6 +55,9 @@ class DualEncoderModel:
         self.batch_loss = None
         self.loss = 0
         self.batch_prob = None
+
+        # extracao dos scores
+        self.scoreY = None
         
         # for global counter
         self.global_step = tf.Variable(0, dtype=tf.int32, trainable=False, name='global_step')
@@ -165,7 +168,7 @@ class DualEncoderModel:
             tmp_y = tf.matmul(self.final_encoder, self.M)
             batch_y_hat = tf.reduce_sum( tf.multiply(tmp_y, self.final_encoderR ), 1, keep_dims=True ) + self.b
             self.batch_prob = tf.sigmoid( batch_y_hat )
-                
+            self.scoreY = batch_y_hat
         
         with tf.name_scope('loss') as scope:
             
@@ -228,7 +231,8 @@ def train_step(sess, model, batch_gen):
     input_feed[model.dr_memory_prob] = model.memory_dr
     
     _, summary = sess.run([model.optimizer, model.summary_op], input_feed)
-    
+
+
     return summary
 
     
@@ -245,9 +249,10 @@ def train_model(model, batch_gen, num_train_steps, valid_freq, is_save=0, graph_
     MAX_EARLY_STOP_COUNT = 5
     
     with tf.Session(config=config) as sess:
-        
+
         sess.run(tf.global_variables_initializer())
         early_stop_count = MAX_EARLY_STOP_COUNT
+        
         
         if model.use_glove == 1:
             sess.run(model.embedding_init, feed_dict={ model.embedding_placeholder: batch_gen.get_glove() })
@@ -271,7 +276,7 @@ def train_model(model, batch_gen, num_train_steps, valid_freq, is_save=0, graph_
                 # run train 
                 summary = train_step(sess, model, batch_gen)
                 writer.add_summary( summary, global_step=model.global_step.eval() )
-                
+               
             except:
                 print "excepetion occurs in train step"
                 pass
@@ -329,14 +334,16 @@ def create_dir(dir_name):
         
 def main(batch_size, encoder_size, encoderR_size, num_layer, hidden_dim, embed_size,
          num_train_steps, lr, valid_freq, is_save, graph_dir_name, is_test, use_glove, dr,
-         memory_dim, topic_size):
+         memory_dim, topic_size, is_fine_tunning):
     
-    if is_save is 1:
-        create_dir('save/')
-        create_dir('save/'+ graph_dir_name )
-    
-    create_dir('graph/')
-    create_dir('graph/'+graph_dir_name)
+    # so cria se nao for fine_tunning, se for eh pra ter tudo criado ja
+    if not is_fine_tunning:
+        if is_save is 1:
+            create_dir('save/')
+            create_dir('save/'+ graph_dir_name )
+        
+        create_dir('graph/')
+        create_dir('graph/'+graph_dir_name)
     
     batch_gen = ProcessData(is_test=is_test)
     if is_test == 1:
@@ -360,6 +367,7 @@ def main(batch_size, encoder_size, encoderR_size, num_layer, hidden_dim, embed_s
     model.build_graph()
     
     train_model(model, batch_gen, num_train_steps, valid_freq, is_save, graph_dir_name)
+
     
 if __name__ == '__main__':
     
@@ -386,7 +394,10 @@ if __name__ == '__main__':
     # latent topic
     p.add_argument('--memory_dim', type=int, default=32)
     p.add_argument('--topic_size', type=int, default=0)
-    
+
+    # eh fine tunning?
+    p.add_argument('--fine_tunning', dest='fine_tunning', action='store_true')
+    p.set_defaults(fine_tunning=False)
     
     args = p.parse_args()
     
@@ -417,6 +428,7 @@ if __name__ == '__main__':
         use_glove=args.use_glove,
         dr=args.dr,
         memory_dim=args.memory_dim,
-        topic_size=args.topic_size
+        topic_size=args.topic_size,
+        is_fine_tunning=args.fine_tunning
         )
     

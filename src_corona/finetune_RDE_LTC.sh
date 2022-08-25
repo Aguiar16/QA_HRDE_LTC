@@ -1,4 +1,4 @@
-python DE_Model_v2.py \
+python DE_Model_mem_v2.py \
     --batch_size 256 \
     --encoder_size 160 \
     --encoderR_size 160 \
@@ -9,6 +9,10 @@ python DE_Model_v2.py \
     --num_train_steps 100000 \
     --valid_freq 500 \
     --is_save 1 \
-    --graph_prefix 'RDE_ubuntu_v2_' \
+    --graph_prefix 'RDE_LTC_ubuntu_v2_' \
     --use_glove 1 \
-    --dr 0.2
+    --dr 0.2 \
+    --memory_dr 0.8 \
+    --memory_dim 256 \
+    --topic_size 3 \
+    --fine_tunning

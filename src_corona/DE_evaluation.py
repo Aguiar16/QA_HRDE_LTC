@@ -79,12 +79,14 @@ def run_test_r_order(sess, model, batch_gen, data, N):
 
             
             try:
-                bprob, b_loss, lo = sess.run([model.batch_prob, model.batch_loss, model.loss], input_feed)
+                bprob, b_loss, lo, scoreY = sess.run([model.batch_prob, model.batch_loss, model.loss, model.scoreY], input_feed)
             except:
                 print "excepetion occurs in valid step : " + str(test_itr)
                 pass
             
-            
+            with open("scoreRDE.txt",'a') as f:
+                f.write('%s\n' %str(scoreY))
+                
             batch_ce.append( lo )
             
             prob_labels.append( np.reshape(bprob, model.batch_size) )
