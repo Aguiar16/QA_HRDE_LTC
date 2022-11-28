@@ -17,21 +17,23 @@ def bot():
 def bot_response():
     questionJson = request.get_json()
     questionJson = ast.literal_eval(json.dumps(questionJson))
-    questionJson = OrderedDict(sorted(questionJson.items()))
+    # questionJson = OrderedDict(sorted(questionJson.items()))
     # questionJsonKeys= list(reversed(questionJson))
     # print(questionJson)
-    # save_question(questionJson)
+    save_question(questionJson)
     formatQuestion()
 
     return "OK",200
 
 def save_question(dicts):
-    with open('src/corona/botAPI.csv', 'a') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames = dicts)
-        # writer.writeheader()
-        writer.writerow(dicts)
-
-    # (pd.DataFrame.from_dict(data=dicts).to_csv('src/corona/botAPI.csv'))
+    with open('src/corona/questions.json', 'w') as f:
+        json.dump(dicts, f)
+    # with open('src/corona/botAPI.csv', 'w') as csvfile:
+    #     writer = csv.DictWriter(csvfile, fieldnames = dicts)
+    #     # writer.writeheader()
+    #     writer.writerow(dicts)
+    data = pd.read_json("src/corona/questions.json")
+    data.to_csv('src/corona/botAPI.csv', index=False, header=None )
 
 def find_index(word, dic):
     
@@ -54,25 +56,29 @@ def create_data_index(dataset):
     for sent in dataset:
         response.append( [find_index(x, dic) for x in sent[1].split(' ')] )
 
-    label = [ x[2] for x in dataset ]
+    # label = [ x[2] for x in dataset ]
     data_set['c'] = context
     data_set['r'] = response
-    data_set['y'] = label
+    # data_set['y'] = label
     
     return data_set
 
 def formatQuestion():
     test_data = []
-    f = open('src/corona/botAPI.csv', 'r')
-    csvReader = csv.reader(f)
-    for row in csvReader:
-        test_data.append(row)
-    f.close()
+
+    with open('src/corona/botAPI.csv', 'r') as f:
+        csvReader = csv.reader(f)
+        # headings = next(csvReader)
+
+        for row in csvReader:
+            test_data.append(row)
 
     test_set = create_data_index(test_data)
     pickle.dump(test_set, open('src/corona/corona_data.pkl', 'w') )
     # print(test_set)
+    
     os.system(" python API_RDE.py")
+
     # test_data = pickle.load(open('src/corona/corona_data.pkl', 'r') )
     # print(test_set)
     # # 

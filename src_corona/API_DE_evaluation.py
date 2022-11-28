@@ -98,15 +98,24 @@ def run_test_r_order(sess, model, batch_gen, data, N):
         # [N][ batch result] -> [ batch result ][ N ] 
         prob_reshape = np.transpose(prob_labels).reshape(model.batch_size, len(prob_labels))
 
-        print(prob_reshape)
+        # print(prob_reshape)
 
         # prob_reshape row ranking 
         rank = [ N - rankdata(x, method='max') for x in prob_reshape ]
-        zzRank = [rankdata(x, method='max') for x in prob_reshape]
-        print()
-        print(zzRank)
+        # print(rank)
+        # indices = np.argsort(rank[0])[::-1][:5]
+        indices = np.argsort(rank[0])[:5]
+
+        # indices = np.argpartition(rank[0], -3)[-3:]
+        
+        # print(indices)
+        probIndices = prob_reshape[0]
+        print(probIndices[indices])
+
+
 
         batch_correct.append( sum([1 for x in rank if x[-1] < 1 ]) )
+        # print(batch_correct)
 
         # with open("src/rank.txt", "w") as f:
         #     f.write(str(batch_correct))
@@ -140,4 +149,5 @@ def run_test_r_order(sess, model, batch_gen, data, N):
     value2 = summary_pb2.Summary.Value(tag="valid_accuracy_"+str(N), simple_value=avg_accr)
     summary = summary_pb2.Summary(value=[value1, value2])
     
-    return avg_ce, avg_accr, summary, avg_accr_R2, avg_accr_R5
+    
+    return avg_ce, avg_accr, summary, avg_accr_R2, avg_accr_R5, indices

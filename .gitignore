@@ -1,8 +1,9 @@
 # data will be released via data rpository
 glove_s300.txt
-data
+*.csv
 save
 graph
+*.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

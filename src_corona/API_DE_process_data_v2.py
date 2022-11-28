@@ -70,47 +70,50 @@ class ProcessData:
         
 
     # convert to soucre, target, label
-    def create_train_set(self):
+    # def create_train_set(self):
         
-        data_len = len(self.train_data['c'])
+    #     data_len = len(self.train_data['c'])
         
-        for index in xrange(data_len):
+    #     for index in xrange(data_len):
             
-            source_ids = self.train_data['c'][index]
-            target_ids = self.train_data['r'][index]
-            # print(self.train_data['y'][index])
-            label = float(self.train_data['y'][index])
+    #         source_ids = self.train_data['c'][index]
+    #         target_ids = self.train_data['r'][index]
+    #         # print(self.train_data['y'][index])
+    #         label = float(self.train_data['y'][index])
             
-            self.train_set.append( [source_ids, target_ids, label] )
+    #         self.train_set.append( [source_ids, target_ids, label] )
         
-        print '[completed] create trian set : ' + str(len(self.train_set))
+    #     print '[completed] create trian set : ' + str(len(self.train_set))
             
       
-    # create valid set : response 0 : true, response 1-9 : false
-    def create_valid_set(self):
+    # # create valid set : response 0 : true, response 1-9 : false
+    # def create_valid_set(self):
         
-        data_len = len(self.valid_data['c'])
+    #     data_len = len(self.valid_data['c'])
             
-        for index in xrange(data_len / 10):
+    #     for index in xrange(data_len / 10):
         
-            t_index = index * 10
+    #         t_index = index * 10
             
-            source_ids = self.valid_data['c'][t_index]
+    #         source_ids = self.valid_data['c'][t_index]
 
-            list_target_ids = []
-            for i in xrange(10) :
-                list_target_ids.append( self.valid_data['r'][t_index+i] )
+    #         list_target_ids = []
+    #         for i in xrange(10) :
+    #             list_target_ids.append( self.valid_data['r'][t_index+i] )
 
-            self.valid_set.append( [source_ids, list_target_ids] )
+    #         self.valid_set.append( [source_ids, list_target_ids] )
     
-        print '[completed] create valid set : ' + str(len(self.valid_set))
+    #     print '[completed] create valid set : ' + str(len(self.valid_set))
         
         
     # create test set : test_data (word) -> test_set (index number)        
     def create_test_set(self):
         
         data_len = len(self.test_data['c'])
-            
+        # data = self.test_data
+        # with open("src/test.txt", "w") as f:
+        #     f.write(data)
+        # print(data)
         for index in xrange(data_len / 10):
         
             t_index = index * 10

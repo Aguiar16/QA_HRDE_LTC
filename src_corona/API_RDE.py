@@ -4,6 +4,7 @@ evaluation RDE
 
 import os
 import numpy as np
+import pandas as pd
 
 path = './save/'
 
@@ -43,9 +44,18 @@ def run_single_eval(model, batch_gen, target_dir, N):
             print ('from check point!!!')
             saver.restore(sess, ckpt.model_checkpoint_path)
 
-        ce, accr, summary, r2, r5 = run_test_r_order(sess=sess, model=model, batch_gen=batch_gen,
+        ce, accr, summary, r2, r5,indices = run_test_r_order(sess=sess, model=model, batch_gen=batch_gen,
                                                  data=batch_gen.test_set, N=N)
 
+    dfQuestions = pd.read_csv('src/corona/botAPI.csv',header=None)
+    dfAnswers = dfQuestions.take(indices)
+    responses = []
+
+    for index, row in dfAnswers.iterrows():
+        responses.append(row[1])
+    
+    print(responses)
+    # print(dfAnswers)
     return accr, r2, r5
 
 
@@ -53,7 +63,7 @@ def run_single_eval(model, batch_gen, target_dir, N):
 def evals(result_file_name, path, list_save, model, batch_gen):
   
     log_f = path + result_file_name
-    print log_f
+    # print log_f
 
     with open(log_f, 'w') as f:
         
@@ -66,31 +76,31 @@ def evals(result_file_name, path, list_save, model, batch_gen):
 
             f.write(save_name + '\n')
 
-            accr, r2, r5 = run_single_eval(model, batch_gen, path + save_name, 2)
-            print accr, r2, r5
-            n2_r1.append(accr)
-            f.write( str(accr) + '\t')
+            # accr, r2, r5 = run_single_eval(model, batch_gen, path + save_name, 2)
+            # print accr, r2, r5
+            # n2_r1.append(accr)
+            # f.write( str(accr) + '\t')
 
             
-            accr, r2, r5 = run_single_eval(model, batch_gen, path + save_name, 2)
-            print accr, r2, r5
-            n2_r1.append(accr)
-            f.write( str(accr) + '\t')
+            # accr, r2, r5 = run_single_eval(model, batch_gen, path + save_name, 2)
+            # print accr, r2, r5
+            # n2_r1.append(accr)
+            # f.write( str(accr) + '\t')
             
             
             accr, r2, r5 = run_single_eval(model, batch_gen, path + save_name, 10)
-            print accr, r2, r5
+            # print accr, r2, r5
             n10_r1.append(accr)
             n10_r2.append(r2)
             n10_r5.append(r5)
-            f.write( str(accr) + '\t' + str(r2) + '\t' + str(r5) + '\n')
+            # f.write( str(accr) + '\t' + str(r2) + '\t' + str(r5) + '\n')
             
-        print "mean-std"
-        print str(np.mean(n2_r1)), str(np.mean(n10_r1)), str(np.mean(n10_r2)), str(np.mean(n10_r5))
-        print str( np.std(n2_r1)), str( np.std(n10_r1)), str( np.std(n10_r2)), str( np.std(n10_r5))
+        # print "mean-std"
+        # print str(np.mean(n2_r1)), str(np.mean(n10_r1)), str(np.mean(n10_r2)), str(np.mean(n10_r5))
+        # print str( np.std(n2_r1)), str( np.std(n10_r1)), str( np.std(n10_r2)), str( np.std(n10_r5))
         
-        f.write( str(np.mean(n2_r1)) + '\t' + str(np.mean(n10_r1)) + '\t' + str(np.mean(n10_r2)) + '\t' + str(np.mean(n10_r5)) + '\n')
-        f.write( str( np.std(n2_r1)) + '\t' + str( np.std(n10_r1)) + '\t' + str( np.std(n10_r2)) + '\t' + str( np.std(n10_r5)) + '\n\n')
+        # f.write( str(np.mean(n2_r1)) + '\t' + str(np.mean(n10_r1)) + '\t' + str(np.mean(n10_r2)) + '\t' + str(np.mean(n10_r5)) + '\n')
+        # f.write( str( np.std(n2_r1)) + '\t' + str( np.std(n10_r1)) + '\t' + str( np.std(n10_r2)) + '\t' + str( np.std(n10_r5)) + '\n\n')
         
         
 '''
